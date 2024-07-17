@@ -35,7 +35,7 @@ export default function Home() {
 
 
     // Add new message to local state immediately
-    setMessages([...messages, newMessage]);
+    setMessages(prevMessages => [...prevMessages, newMessage]);
     setInputValue(''); // Clear input field
 
     try {
@@ -51,13 +51,12 @@ export default function Home() {
         throw new Error('Failed to add message');
       }
 
-      // Optionally, update state with response from server if needed
       const data = await response.json();
       resMessage.data = data;
-      setMessages([...messages, resMessage]);
-      console.log('Server response:', data);
+      setMessages(prevMessages => [...prevMessages, { ...resMessage, data }]);
+      // console.log('Server response:', data);
     } catch (error) {
-      console.error('Error adding message:', error);
+      // console.error('Error adding message:', error);
     }
   };
 
@@ -80,13 +79,6 @@ export default function Home() {
             </div>
           ))}
           <br />
-          {/* <div className="row d-inline-block rightMsg bg-secondary">
-          Hii
-        </div>
-        <br />
-        <div className="row d-inline-block leftMsg bg-primary">
-          Hii, How are you
-        </div> */}
         </div>
       </div>
       {/* Query Input */}
