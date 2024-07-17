@@ -21,17 +21,18 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Jupyter
-RUN pip install --no-cache-dir jupyter
+# RUN pip install --no-cache-dir jupyter
 
 # Copy the entire project into the container
 COPY . .
 
 # Expose port 8888 for Jupyter Notebook
-EXPOSE 8888
+EXPOSE 8000
 
 # Set environment variable for OpenAI API key
 # In production, we'll use secrets management instead of hardcoding
 ENV OPENAI_API_KEY=${OPENAI_API_KEY}
 
 # Start Jupyter Notebook
-CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+# CMD ["jupyter", "notebook", "--ip=0.0.0.0", "--port=8888", "--no-browser", "--allow-root"]
+CMD ["uvicorn", "sukoon_api:app", "--host", "0.0.0.0", "--port", "8000"]
